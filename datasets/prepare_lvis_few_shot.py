@@ -50,7 +50,7 @@ def parse_args():
     parser.add_argument(
         "--data",
         type=str,
-        default="datasets/lvis/lvis_v0.5_train.json",
+        default="datasets/lvis/lvis_v1_train.json",
         help="path to the annotation file",
     )
     parser.add_argument(

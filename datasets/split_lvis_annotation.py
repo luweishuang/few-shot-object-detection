@@ -8,7 +8,7 @@ def parse_args():
     parser.add_argument(
         "--data",
         type=str,
-        default="datasets/lvis/lvis_v0.5_train.json",
+        default="datasets/lvis/lvis_v1_train.json",
         help="path to the annotation file",
     )
     parser.add_argument(
@@ -49,7 +49,7 @@ def split_annotation(args):
         ann_s["images"] = new_images
 
         save_path = os.path.join(
-            args.save_dir, "lvis_v0.5_train_{}.json".format(name)
+            args.save_dir, "lvis_v1_train_{}.json".format(name)
         )
         print("Saving {} annotations to {}.".format(name, save_path))
         with open(save_path, "w") as fp:
