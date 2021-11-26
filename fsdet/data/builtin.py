@@ -20,6 +20,7 @@ from .builtin_meta import _get_builtin_metadata
 from .meta_coco import register_meta_coco
 from .meta_lvis import register_meta_lvis
 from .meta_pascal_voc import register_meta_pascal_voc
+from .meta_powertower import register_meta_powertower
 
 # ==== Predefined datasets and splits for COCO ==========
 
@@ -263,7 +264,48 @@ def register_all_pascal_voc(root="datasets"):
         MetadataCatalog.get(name).evaluator_type = "pascal_voc"
 
 
+# ==== Predefined splits for powertower ===========
+def register_all_powertower(root="datasets"):
+    # register meta datasets
+    METASPLITS = [
+        ("powertower_trainval_base1", "powertower", "trainval", "base1", 1),
+        ("powertower_trainval_all1", "powertower", "trainval", "base_novel_1", 1),
+        ("powertower_test_base1", "powertower", "test", "base1", 1),
+        ("powertower_test_novel1", "powertower", "test", "novel1", 1),
+        ("powertower_test_all1", "powertower", "test", "base_novel_1", 1),
+    ]
+
+    # register small meta datasets for fine-tuning stage
+    for prefix in ["all", "novel"]:
+        for sid in range(1, 2):
+            for shot in [1, 5, 10]:
+                for seed in range(100):
+                    seed = "" if seed == 0 else "_seed{}".format(seed)
+                    name = "powertower_trainval_{}{}_{}shot{}".format(prefix, sid, shot, seed)
+                    dirname = "powertower"
+                    img_file = "{}_{}shot_split_{}_trainval".format(prefix, shot, sid)
+                    keepclasses = (
+                        "base_novel_{}".format(sid)
+                        if prefix == "all" else "novel{}".format(sid)
+                    )
+                    METASPLITS.append(
+                        (name, dirname, img_file, keepclasses, sid)
+                    )
+
+    for name, dirname, split, keepclasses, sid in METASPLITS:
+        register_meta_powertower(
+            name,
+            _get_builtin_metadata("powertower_fewshot"),
+            os.path.join(root, dirname),
+            split,
+            keepclasses,
+            sid,
+        )
+        MetadataCatalog.get(name).evaluator_type = "powertower"
+
+
 # Register them all under "./datasets"
 register_all_coco()
 register_all_lvis()
 register_all_pascal_voc()
+register_all_powertower()

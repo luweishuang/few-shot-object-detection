@@ -376,6 +376,12 @@ PASCAL_VOC_BASE_CATEGORIES = {
 }
 
 
+POWERTOWER_ALL_CATEGORIES = {
+    1: ['broken', 'laughcrack', 'damage', 'corroison', 'rust', 'endjump', 'bondlinebroken', 'straightpipebend'],
+    2: ['broken', 'laughcrack', 'endjump', 'damage', 'rust', 'bondlinebroken', 'corroison', 'straightpipebend'],
+    3: ['broken', 'corroison', 'laughcrack', 'damage', 'rust', 'bondlinebroken', 'endjump', 'straightpipebend'],
+}
+
 def _get_coco_instances_meta():
     thing_ids = [k["id"] for k in COCO_CATEGORIES if k["isthing"] == 1]
     thing_colors = [k["color"] for k in COCO_CATEGORIES if k["isthing"] == 1]
@@ -455,6 +461,15 @@ def _get_pascal_voc_fewshot_instances_meta():
     return ret
 
 
+def _get_power_tower_fewshot_instances_meta():
+    ret = {
+        "thing_classes": POWERTOWER_ALL_CATEGORIES,
+        "novel_classes": POWERTOWER_ALL_CATEGORIES,
+        "base_classes": POWERTOWER_ALL_CATEGORIES,
+    }
+    return ret
+
+
 def _get_builtin_metadata(dataset_name):
     if dataset_name == "coco":
         return _get_coco_instances_meta()
@@ -466,4 +481,6 @@ def _get_builtin_metadata(dataset_name):
         return _get_lvis_fewshot_instances_meta_v0_5()
     elif dataset_name == "pascal_voc_fewshot":
         return _get_pascal_voc_fewshot_instances_meta()
+    elif dataset_name == "powertower_fewshot":
+        return _get_power_tower_fewshot_instances_meta()
     raise KeyError("No built-in metadata for dataset {}".format(dataset_name))
