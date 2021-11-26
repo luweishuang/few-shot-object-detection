@@ -101,36 +101,34 @@ class PowertowerDetectionEvaluator(DatasetEvaluator):
                 with open(res_file_template.format(cls_name), "w") as f:
                     f.write("\n".join(lines))
 
-                for thresh in range(5, 50, 5):
-                    rec, prec, ap = powertower_eval(
-                        res_file_template,
-                        self._anno_file_template,
-                        self._image_set_path,
-                        cls_name,
-                        ovthresh=thresh / 100.0
-                    )
-                    aps[thresh].append(ap * 100)
+                thresh = 1
+                rec, prec, ap = powertower_eval(
+                    res_file_template,
+                    self._anno_file_template,
+                    self._image_set_path,
+                    cls_name,
+                    ovthresh=thresh / 100.0
+                )
+                aps[thresh].append(ap * 100)
 
-                    if (
-                        self._base_classes is not None
-                        and cls_name in self._base_classes
-                    ):
-                        aps_base[thresh].append(ap * 100)
-                        exist_base = True
+                if (
+                    self._base_classes is not None
+                    and cls_name in self._base_classes
+                ):
+                    aps_base[thresh].append(ap * 100)
+                    exist_base = True
 
-                    if (
-                        self._novel_classes is not None
-                        and cls_name in self._novel_classes
-                    ):
-                        aps_novel[thresh].append(ap * 100)
-                        exist_novel = True
+                if (
+                    self._novel_classes is not None
+                    and cls_name in self._novel_classes
+                ):
+                    aps_novel[thresh].append(ap * 100)
+                    exist_novel = True
 
         ret = OrderedDict()
         mAP = {iou: np.mean(x) for iou, x in aps.items()}
         ret["bbox"] = {
             "AP": np.mean(list(mAP.values())),
-            "AP50": mAP[50],
-            "AP75": mAP[75],
         }
 
         # adding evaluation of the base and novel classes
@@ -139,8 +137,6 @@ class PowertowerDetectionEvaluator(DatasetEvaluator):
             ret["bbox"].update(
                 {
                     "bAP": np.mean(list(mAP_base.values())),
-                    "bAP50": mAP_base[50],
-                    "bAP75": mAP_base[75],
                 }
             )
 
@@ -149,22 +145,14 @@ class PowertowerDetectionEvaluator(DatasetEvaluator):
             ret["bbox"].update(
                 {
                     "nAP": np.mean(list(mAP_novel.values())),
-                    "nAP50": mAP_novel[50],
-                    "nAP75": mAP_novel[75],
                 }
             )
 
         # write per class AP to logger
-        per_class_res = {
-            self._class_names[idx]: ap for idx, ap in enumerate(aps[50])
-        }
+        per_class_res = {self._class_names[idx]: ap for idx, ap in enumerate(aps[1])}
 
-        self._logger.info(
-            "Evaluate per-class mAP50:\n" + create_small_table(per_class_res)
-        )
-        self._logger.info(
-            "Evaluate overall bbox:\n" + create_small_table(ret["bbox"])
-        )
+        self._logger.info("Evaluate per-class mAP1:\n" + create_small_table(per_class_res))
+        self._logger.info("Evaluate overall bbox:\n" + create_small_table(ret["bbox"]))
         return ret
 
 
