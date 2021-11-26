@@ -109,6 +109,7 @@ class PowertowerDetectionEvaluator(DatasetEvaluator):
                     cls_name,
                     ovthresh=thresh / 100.0
                 )
+                self._logger.info("%s : precise %.4f recall %.4f\n" % (cls_name, prec, rec))
                 aps[thresh].append(ap * 100)
 
                 if (
@@ -150,7 +151,6 @@ class PowertowerDetectionEvaluator(DatasetEvaluator):
 
         # write per class AP to logger
         per_class_res = {self._class_names[idx]: ap for idx, ap in enumerate(aps[1])}
-
         self._logger.info("Evaluate per-class mAP1:\n" + create_small_table(per_class_res))
         self._logger.info("Evaluate overall bbox:\n" + create_small_table(ret["bbox"]))
         return ret
