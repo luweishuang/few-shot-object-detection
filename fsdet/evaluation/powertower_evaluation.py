@@ -231,8 +231,7 @@ def powertower_eval(
     annopath,
     imagesetfile,
     classname,
-    ovthresh=0.5,
-    use_07_metric=False,
+    ovthresh=0.5
 ):
     """rec, prec, ap = voc_eval(detpath,
                                 annopath,
@@ -351,6 +350,6 @@ def powertower_eval(
     # avoid divide by zero in case the first detection matches a difficult
     # ground truth
     prec = tp / np.maximum(tp + fp, np.finfo(np.float64).eps)
-    ap = voc_ap(rec, prec, use_07_metric)
+    ap = voc_ap(rec, prec)
 
     return rec, prec, ap

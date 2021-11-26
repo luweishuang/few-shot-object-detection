@@ -50,6 +50,7 @@ def parse_args():
     # Dataset
     parser.add_argument("--coco", action="store_true", help="For COCO models")
     parser.add_argument("--lvis", action="store_true", help="For LVIS models")
+    parser.add_argument("--powertower", action="store_true", help="For powertower models")
     args = parser.parse_args()
     return args
 
@@ -150,9 +151,9 @@ def combine_ckpts(args):
 
 def surgery_loop(args, surgery):
     # Load checkpoints
-    ckpt = torch.load(args.src1)
+    ckpt = torch.load(args.src1, map_location=torch.device('cpu'))
     if args.method == "combine":
-        ckpt2 = torch.load(args.src2)
+        ckpt2 = torch.load(args.src2, map_location=torch.device('cpu'))
         save_name = args.tar_name + "_combine.pth"
     else:
         ckpt2 = None
@@ -273,6 +274,11 @@ if __name__ == "__main__":
         ALL_CLASSES = sorted(BASE_CLASSES + NOVEL_CLASSES)
         IDMAP = {v: i for i, v in enumerate(ALL_CLASSES)}
         TAR_SIZE = 1230
+    elif args.powertower:
+        # powertower
+        ALL_CLASSES = [1, 2, 3, 4, 5, 6, 7, 8]
+        IDMAP = {v: i for i, v in enumerate(ALL_CLASSES)}
+        TAR_SIZE = 8
     else:
         # VOC
         TAR_SIZE = 20
