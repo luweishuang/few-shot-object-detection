@@ -132,14 +132,14 @@ def load_filtered_powertower_instances(
 
 
 def register_meta_powertower(
-    name, metadata, dirname, split, keepclasses, sid
+    name, metadata, dirname, split, keepclasses
 ):
     if keepclasses.startswith("base_novel"):
-        thing_classes = metadata["thing_classes"][sid]
+        thing_classes = metadata["thing_classes"]
     elif keepclasses.startswith("base"):
-        thing_classes = metadata["base_classes"][sid]
+        thing_classes = metadata["base_classes"]
     elif keepclasses.startswith("novel"):
-        thing_classes = metadata["novel_classes"][sid]
+        thing_classes = metadata["novel_classes"]
 
     DatasetCatalog.register(
         name,
@@ -152,6 +152,6 @@ def register_meta_powertower(
         thing_classes=thing_classes,
         dirname=dirname,
         split=split,
-        base_classes=metadata["base_classes"][sid],
-        novel_classes=metadata["novel_classes"][sid],
+        base_classes=metadata["base_classes"],
+        novel_classes=metadata["novel_classes"],
     )

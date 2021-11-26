@@ -376,12 +376,6 @@ PASCAL_VOC_BASE_CATEGORIES = {
 }
 
 
-POWERTOWER_ALL_CATEGORIES = {
-    1: ['broken', 'laughcrack', 'damage', 'corroison', 'rust', 'endjump', 'bondlinebroken', 'straightpipebend'],
-    2: ['broken', 'laughcrack', 'endjump', 'damage', 'rust', 'bondlinebroken', 'corroison', 'straightpipebend'],
-    3: ['broken', 'corroison', 'laughcrack', 'damage', 'rust', 'bondlinebroken', 'endjump', 'straightpipebend'],
-}
-
 def _get_coco_instances_meta():
     thing_ids = [k["id"] for k in COCO_CATEGORIES if k["isthing"] == 1]
     thing_colors = [k["color"] for k in COCO_CATEGORIES if k["isthing"] == 1]
@@ -459,6 +453,9 @@ def _get_pascal_voc_fewshot_instances_meta():
         "base_classes": PASCAL_VOC_BASE_CATEGORIES,
     }
     return ret
+
+
+POWERTOWER_ALL_CATEGORIES = ['broken', 'laughcrack', 'damage', 'corroison', 'rust', 'endjump', 'bondlinebroken', 'straightpipebend']
 
 
 def _get_power_tower_fewshot_instances_meta():

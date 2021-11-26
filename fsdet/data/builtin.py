@@ -269,38 +269,35 @@ def register_all_powertower(root="datasets"):
     # register meta datasets
     METASPLITS = [
         # name, dirname, img_file, keepclasses, sid
-        ("powertower_trainval_base1", "powertower", "trainval", "base1", 1),
-        ("powertower_trainval_all1", "powertower", "trainval", "base_novel_1", 1),
-        ("powertower_test_base1", "powertower", "test", "base1", 1),
-        ("powertower_test_novel1", "powertower", "test", "novel1", 1),
-        ("powertower_test_all1", "powertower", "test", "base_novel_1", 1),
+        ("powertower_trainval_base", "powertower", "trainval", "base1"),
+        ("powertower_trainval_all", "powertower", "trainval", "base_novel_1"),
+        ("powertower_test_base", "powertower", "test", "base1"),
+        ("powertower_test_novel", "powertower", "test", "novel1"),
+        ("powertower_test_all", "powertower", "test", "base_novel_1"),
     ]
 
     # register small meta datasets for fine-tuning stage
     for prefix in ["all", "novel"]:
-        for sid in range(1, 2):
             for shot in [1, 5, 10]:
                 for seed in range(100):
                     seed = "" if seed == 0 else "_seed{}".format(seed)
-                    name = "powertower_trainval_{}{}_{}shot{}".format(prefix, sid, shot, seed)
+                    name = "powertower_trainval_{}_{}shot{}".format(prefix, shot, seed)
                     dirname = "powertower"
-                    img_file = "{}_{}shot_split_{}_trainval".format(prefix, shot, sid)
+                    img_file = "{}_{}shot_split_trainval".format(prefix, shot)
                     keepclasses = (
-                        "base_novel_{}".format(sid)
-                        if prefix == "all" else "novel{}".format(sid)
+                        "base_novel" if prefix == "all" else "novel"
                     )
                     METASPLITS.append(
-                        (name, dirname, img_file, keepclasses, sid)
+                        (name, dirname, img_file, keepclasses)
                     )
 
-    for name, dirname, split, keepclasses, sid in METASPLITS:
+    for name, dirname, split, keepclasses in METASPLITS:
         register_meta_powertower(
             name,
             _get_builtin_metadata("powertower_fewshot"),
             os.path.join(root, dirname),
             split,
-            keepclasses,
-            sid,
+            keepclasses
         )
         MetadataCatalog.get(name).evaluator_type = "powertower"
 
