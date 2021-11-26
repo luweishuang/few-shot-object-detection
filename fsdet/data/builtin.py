@@ -268,6 +268,7 @@ def register_all_pascal_voc(root="datasets"):
 def register_all_powertower(root="datasets"):
     # register meta datasets
     METASPLITS = [
+        # name, dirname, img_file, keepclasses, sid
         ("powertower_trainval_base1", "powertower", "trainval", "base1", 1),
         ("powertower_trainval_all1", "powertower", "trainval", "base_novel_1", 1),
         ("powertower_test_base1", "powertower", "test", "base1", 1),
