@@ -29,6 +29,8 @@ datasets/vocsplit
 datasets/lvis
 datasets/lvissplit
 datasets/*/seed*
+datasets/powertower/
+datasets/powertowersplit/
 
 # configs
 configs/Test
