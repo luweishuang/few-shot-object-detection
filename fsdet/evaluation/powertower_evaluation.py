@@ -109,7 +109,11 @@ class PowertowerDetectionEvaluator(DatasetEvaluator):
                     cls_name,
                     ovthresh=thresh / 100.0
                 )
-                self._logger.info("%s : precise %.4f recall %.4f\n" % (cls_name, prec, rec))
+                print("--------------------")
+                print(cls_id, cls_name)
+                print(rec)
+                print(prec)
+                # self._logger.info("%s : precise %.4f recall %.4f\n" % (cls_name, prec, rec))
                 aps[thresh].append(ap * 100)
 
                 if (
@@ -275,7 +279,6 @@ def powertower_eval(
     detfile = detpath.format(classname)
     with open(detfile, "r") as f:
         lines = f.readlines()
-
     splitlines = [x.strip().split(" ") for x in lines]
     image_ids = [x[0] for x in splitlines]
     confidence = np.array([float(x[1]) for x in splitlines])
