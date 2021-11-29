@@ -49,9 +49,7 @@ class PascalVOCDetectionEvaluator(DatasetEvaluator):
         self._logger = logging.getLogger(__name__)
 
     def reset(self):
-        self._predictions = defaultdict(
-            list
-        )  # class name -> list of prediction strings
+        self._predictions = defaultdict(list)  # class name -> list of prediction strings
 
     def process(self, inputs, outputs):
         for input, output in zip(inputs, outputs):
@@ -305,9 +303,7 @@ def voc_eval(
     splitlines = [x.strip().split(" ") for x in lines]
     image_ids = [x[0] for x in splitlines]
     confidence = np.array([float(x[1]) for x in splitlines])
-    BB = np.array([[float(z) for z in x[2:]] for x in splitlines]).reshape(
-        -1, 4
-    )
+    BB = np.array([[float(z) for z in x[2:]] for x in splitlines]).reshape(-1, 4)
 
     # sort by confidence
     sorted_ind = np.argsort(-confidence)
